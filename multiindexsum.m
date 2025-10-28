@@ -1,5 +1,5 @@
 function [list] = multiindexsum(order,n)
-%MULTINDEXSUM all multiindces of lenght n with order 
+%MULTINDEXSUM all multiindces of length n with order 
 
 [C{1:n}] = ndgrid(0:order);
 C = cell2mat(cellfun(@(x)(reshape(x,[],1)),C,'UniformOutput',false));
