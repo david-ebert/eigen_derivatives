@@ -1,3 +1,6 @@
+% degenerate eigenvalues (multiplicity 3), 
+% such that all trajectories cross pairwise
+
 clear; restoredefaultpath
 %%
 

@@ -1,5 +1,16 @@
 function [N] = multinom(alpha)
-%MULTINOM multinomial coefficient of multiindex alpha
+%MULTINOM multinomial coefficient of list of multiindeces
+%   [N] = multinom(alpha)
+%
+% Input Arguments
+%   alpha - List of multiindicies
+%       nxm matrix
+%
+% Output Arguments
+%   list - Multinomial coefficient of multiindices
+%       nx1 vector
+%
+%   See also MULTIINDEXSUM
 
 [n,l] = size(alpha); % length of multiindex
 

@@ -1,18 +1,36 @@
-function [du_Q,u0_Q] = du_pol(u0,du,Q0,dQ)
-%DU_POL polarized eigenfunction derivatives
-%   [du_Q] = DU_POL(u0,du,Q0):     constant polarization
-%   [du_Q] = DU_POL(u0,du,Q0,dQ):  non-constant polarization
+function [du_pol,u0_pol] = du_pol(u0,du,P0,dP)
+%DU_POL - Polarized eigenfunction derivatives
+%   [du_P] = DU_POL(u0,du,P0):     constant polarization
+%   [du_P] = DU_POL(u0,du,P0,dP):  non-constant polarization
+%
+% Input Arguments
+%   u0 - Initial eigenfunctions
+%       nxm-matrix
+%   du - Derivatives of eigenfunctions wrt eigenspace
+%       cell vector of nxm-matrices
+%   P0 - Initial polarization matrix
+%       mxm-matrix
+%   dP - Derivatives of polarization matrix
+%       cell vector of mxm-matrices
+%
+% Output Arguments
+%   du_pol - Polarized eigenfunction derivatives
+%       cell vector of nxm-matrices
+%   u0_pol - Polarized initial eigenfunctions
+%       nxm-matrix
+%
+% See also EIG_DER, POL, POL_DER
 
-u0_Q = u0*Q0;
+u0_pol = u0*P0;
 switch nargin 
     case 3
         d = length(du);
-        du_Q = cells(d,1);
+        du_pol = cells(d,1);
         for i = 1:d
-            du_Q = du{1}*Q0;
+            du_pol = du{1}*P0;
         end
     case 4
-        d = length(dQ);
+        d = length(dP);
         size_du = size(u0);
     
         % merge u0 and du
@@ -25,14 +43,14 @@ switch nargin
     
         % merge Q0 and dQ
         Q_dQ = cell(d+1,1);
-        Q_dQ{1} = Q0;
+        Q_dQ{1} = P0;
         for i = 1:d
-            Q_dQ{1+i} = dQ{i};
+            Q_dQ{1+i} = dP{i};
         end
-        clear Q0 dQ
+        clear P0 dP
     
         %% calculations
-        du_Q = cell(d,1);
+        du_pol = cell(d,1);
         for k = 1:d
             mindexs = multiindexsum(k,2);
             mnc = multinom(mindexs);
@@ -43,7 +61,7 @@ switch nargin
                 ind = mindexs(i_build,:);
                 dku = mnc(i_build) * u_du{1+ind(1)}* Q_dQ{1+ind(2)};
             end
-            du_Q{k} = dku;
+            du_pol{k} = dku;
         end
 end
 

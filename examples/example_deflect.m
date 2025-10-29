@@ -1,3 +1,7 @@
+% degenerate eigenvalues (multiplicity 2),
+% such that the trajectories deflect,
+% first derivatives of eigenvalues coincide, second derivatives differ
+
 clear; restoredefaultpath
 %%
 

@@ -1,8 +1,29 @@
 function [dL,du] = eig_der(l0,u0,A0,dA,M0,dM)
-%EIG_DER derivatives with respect to the eigenspace
+%EIG_DER - Derivatives of eigenpairs (with respect to the eigenspace)
 %   [dL,du] = EIG_DER(l0,u0,A0,dA)
 %   [dL,du] = EIG_DER(l0,u0,A0,dA,M0)
 %   [dL,du] = EIG_DER(l0,u0,A0,dA,M0,dM)
+% 
+% Input Arguments
+%   l0 - Eigenvalue of eigenspace
+%       scalar
+%   u0 - Eigenfunctions of eigenspace
+%       nxm-matrix
+%   A0 - (Stiffness) matrix
+%       nxn-matrix
+%   dA - Derivatives of (stiffness) matrix
+%       cell vector of nxn-matrices
+%   M0 - Mass matrix
+%       eye(n) (default) nxn-matrix;
+%   dM - Derivatives of mass matrix
+%       (optional) cell vector of nxn-matrices
+%       assumed zeros if not specified
+%
+% Output Arguments
+%   dL - Eigenvalue derivatives wrt eigenspace
+%       cell vector of mxm-matrices
+%   du - Eigenfunction derivatives wrt eigenspace
+%       cell vector of nxm-matrices
 
 [n_dof,m] = size(u0);
 d = length(dA);

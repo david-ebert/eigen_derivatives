@@ -1,3 +1,7 @@
+% degenerate eigenvalues (multiplicity 4),
+% such that the eigenvalues form two deflecting pairs,
+% which as pairs cross each other
+
 clear; restoredefaultpath
 %%
 

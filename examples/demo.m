@@ -1,4 +1,8 @@
+% demonstrates the functions of this package
+%
 % PLEASE START VIA EXAMPLE FILE
+% See also EXAMPLE_NONDEGENERATE, EXAMPLE_CROSS_FRISWELL, EXAMPLE_DEFLECT,
+% EXAMPLE_CROSS_CROSS, EXAMPLE_CROSS_DEFLECT, EXAMPLE_PAIR_CROSS
 
 addpath ..
 
@@ -49,15 +53,23 @@ dK_{4} = dx^4       *dx4K + dy^4       *dy4K;
 %% derivatives of eigenpair
 
 % derivatives (with respect to eigenspace)
+tic
 [dL_,du_] = eig_der(l0(1),u0,K0,dK_);
+disp("Derivatives (with respect to eigenspace) in " + num2str(toc) + " seconds.")
 
 if ~degenerate
     dl_ = dL_;
 else
     % polarization
+    tic
     [P0,k_pol] = pol(dL_);
+    disp("Initial polarization in " + num2str(toc) + " seconds.")
+    disp('Polarization:')
+    disp(k_pol)
     % derivatives of polarization
+    tic
     [dP_,dl_] = pol_der(dL_,P0,k_pol,u0,du_);
+    disp("Derivatives of polarization in " + num2str(toc) + " seconds.")
     % polarized derivatives of eigenfunctions
     [du_pol,u0_pol] = du_pol(u0,du_,P0,dP_);
 end
@@ -68,11 +80,6 @@ disp('Eigenvalue derivatives:')
 tab = table(l0,dl_{:});
 tab.Properties.VariableNames = {'l0' 'dl' 'd2l' 'd3l' 'd4l'};
 disp(tab);
-
-if degenerate
-    disp('Polarization:')
-    disp(k_pol)
-end
 
 %% Taylor approximations
 

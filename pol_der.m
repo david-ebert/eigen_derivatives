@@ -1,10 +1,35 @@
-function [dQ,dl_Q] = pol_der(dL,Q0,polk,u0,du,M0,dM)
+function [dP,dl] = pol_der(dL,P0,polk,u0,du,M0,dM)
 %POL_DER calculates available polarized derivatives of dl and corresponding dQ
-%   [dQ,dl_Q] = POL_DER(dL,Q0,polk,u0,du)
-%   [dQ,dl_Q] = POL_DER(dL,Q0,polk,u0,du,M0)
-%   [dQ,dl_Q] = POL_DER(dL,Q0,polk,u0,du,M0,dM)
+%   [dP,dl] = POL_DER(dL,P0,polk,u0,du)
+%   [dP,dl] = POL_DER(dL,P0,polk,u0,du,M0)
+%   [dP,dl] = POL_DER(dL,P0,polk,u0,du,M0,dM)
+%
+% Input Arguments
+%   dL - Eigenvalue derivatives wrt eigenspace
+%       cell vector of mxm-matrices
+%   P0 - Initial eigenfunctions
+%       mxm-matix
+%   polk - Decision matrix
+%       mxm-matix
+%   u0 - Eigenfunctions of eigenspace
+%       nxm-matrix
+%   du - Eigenfunction derivatives wrt eigenspace
+%       cell vector of nxm-matrices
+%   M0 - Mass matrix
+%       eye(n) (default) nxn-matrix;
+%   dM - Derivatives of mass matrix
+%       (optional) cell vector of nxn-matrices
+%       assumed zeros if not specified
+%
+% Output Arguments
+%   dP - Derivatives of polarization matix
+%       cell vector of mxm-matrices
+%   dl - Polarized eigenvalue derivatives
+%       cell vector of mx1-vectors
+%
+% See also EIG_DER, POL, DU_POL
 
-m = length(Q0);
+m = length(P0);
 d = length(dL);
 
 % merge u0 and du
@@ -30,13 +55,13 @@ clear M0 dM
 
 % merge Q0 and initalize
 Q_dQ = cell(d+1,1);
-Q_dQ{1} = Q0;
+Q_dQ{1} = P0;
 for i = 1:d
     Q_dQ{1+i} = zeros(m);
 end
-dl_Q = cell(d,1);
+dl = cell(d,1);
 for i = 1:d
-    dl_Q{i} = zeros(m,1);
+    dl{i} = zeros(m,1);
 end
 
 %% calculations
@@ -44,10 +69,10 @@ end
 for k_l = 1:d
     for i = 1:m
         if k_l <= polk(i,i) 
-            dl_Q{k_l}(i) = Q0(:,i)'*dL{k_l}*Q0(:,i);
+            dl{k_l}(i) = P0(:,i)'*dL{k_l}*P0(:,i);
             continue
         end
-        lhs = -Q0';
+        lhs = -P0';
         rhs = zeros(m,1);
         kii = polk(i,i); % deciding order
         k_Q = k_l-kii;
@@ -58,14 +83,14 @@ for k_l = 1:d
         for j = 1:m
             kij = polk(i,j);
             if kij < kii
-                rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl_Q);
+                rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl);
             end
         end
         Q_dQ{1+k_Q}(:,i) = lhs\rhs;
 
         %% dl
         % calculate dl separately
-        sumR = dL{k_l}*Q0(:,i);
+        sumR = dL{k_l}*P0(:,i);
         mindexs = multiindexsum(k_l,2);
         mindexs = mindexs(mindexs(:,1)>=kii & mindexs(:,1)<k_l,:); % dkL, k > polk
         mnc = multinom(mindexs);
@@ -73,9 +98,9 @@ for k_l = 1:d
         for i_build = 1:n_build
             ind = mindexs(i_build,:);
             sumR = sumR + ...
-                mnc(i_build) * (dL{ind(1)}*Q_dQ{1+ind(2)}(:,i) - Q_dQ{1+ind(2)}(:,i)*dl_Q{ind(1)}(i));
+                mnc(i_build) * (dL{ind(1)}*Q_dQ{1+ind(2)}(:,i) - Q_dQ{1+ind(2)}(:,i)*dl{ind(1)}(i));
         end
-        dl_Q{k_l}(i) = Q0(:,i)'*sumR;
+        dl{k_l}(i) = P0(:,i)'*sumR;
 
         %% dQ final
         % use dl for condition and calculate dQ
@@ -83,7 +108,7 @@ for k_l = 1:d
             kij = polk(i,j);
             if kij == kii
                 if i~=j % standard conditions
-                    rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl_Q);
+                    rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl);
                 else % normalization condition
                     mindexs = multiindexsum(k_Q,5);
                     mindexs = mindexs(mindexs(:,1)<k_Q & mindexs(:,5)<k_Q,:);
@@ -107,9 +132,9 @@ end
 
 %% output
 
-dQ = cell(length(Q_dQ)-1,1);
+dP = cell(length(Q_dQ)-1,1);
 for i = 1:length(Q_dQ)-1
-    dQ{i} = Q_dQ{i+1};
+    dP{i} = Q_dQ{i+1};
 end
 
 end

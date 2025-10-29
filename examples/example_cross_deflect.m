@@ -1,3 +1,6 @@
+% degenerate eigenvalues (multiplicity 3),
+% such that two trajectories deflect while another crosses both
+
 clear; restoredefaultpath
 %%
 

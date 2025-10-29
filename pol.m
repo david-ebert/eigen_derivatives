@@ -1,19 +1,39 @@
-function [Q0,polk] = pol(dL,k)
-%POL Determine initial Polarization Q0 and decision matrix polk
-%   [Q0,polk] = POL(dL)
+function [P0,polk] = pol(dL,tol,k)
+%POL - Initial Polarization Q0 and decision matrix polk
+%   [P0,polk] = POL(dL)
+%   [P0,polk] = POL(dL,tol)
+%
+% Input Arguments
+%   dL - Eigenvalue derivatives wrt eigenspace
+%       cell vector of mxm-matrices
+%   tol - Tolerance for degeneracy
+%       1E-5 (default) positive scalar
+%
+% Output Arguments
+%   P0 - Initial polarization matrix
+%       mxm-matrix
+%   polk - Decision matrix
+%       mxm-matrix
+%
+% See also EIG_DER, POL_DER
 
+switch nargin 
+    case 1
+        k = 1;
+        tol = 1E-5;
+    case 2
+        k = 1;
+end
 n = length(dL{end});
 d = length(dL);
-if nargin == 1
-    k = 1;
-end
+
 polk = ones(n)*k;
 
-[Q0,dl] = eig(dL{k},"vector");
+[P0,dl] = eig(dL{k},"vector");
 
 [dl,ind] = sort(dl);
-Q0 = Q0(:,ind);
-group = group_eig(dl);
+P0 = P0(:,ind);
+group = group_eig(dl,tol);
 
 Q_adj = eye(n);
 for i = 1:max(group)
@@ -21,14 +41,14 @@ for i = 1:max(group)
     if sum(I) > 1
         if k<d
             dL_sub = cell(d,1);
-            for j = k+1:d; dL_sub{j} = Q0(:,I)'*dL{j}*Q0(:,I); end
-            [Q_adj(I,I),polk(I,I)] = pol(dL_sub,k+1); % recursion
+            for j = k+1:d; dL_sub{j} = P0(:,I)'*dL{j}*P0(:,I); end
+            [Q_adj(I,I),polk(I,I)] = pol(dL_sub,tol,k+1); % recursion
         else
             polk = Inf; % ran out of derivatives
         end
     end
 end
-Q0 = Q0*Q_adj;
+P0 = P0*Q_adj;
 if k==1 && any(polk(:)==Inf)
     warning('eig_deriv:pol_unseparable', ...
         ['No more derivatives of eigenvalues with respect to eigenspace available. ' ...

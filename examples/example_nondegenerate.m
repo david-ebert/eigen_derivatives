@@ -1,10 +1,14 @@
-clear; restoredefaultpath
-%%
-
+% non-degenerate eigenvalue
+%
+% See also EXAMPLE_CROSS_FRISWELL
+%
 % Friswell, M. I. (July 1, 1996). 
 % "The Derivatives of Repeated Eigenvalues and Their Associated Eigenvectors." 
 % ASME. J. Vib. Acoust. July 1996; 118(3): 390–397.
 % https://doi.org/10.1115/1.2888195
+
+clear; restoredefaultpath
+%%
 
 n_inner = 2;
 n_ev    = 1;
