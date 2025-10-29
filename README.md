@@ -1,19 +1,25 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17478322.svg)](https://doi.org/10.5281/zenodo.17478322)
+
 # eigen_derivatives
 
 This Matlab package is an implementation of the pseudocode presented in chapter 3 of the PhD thesis
 
 > *Uncertainty Quantification of Elliptic Eigenvalue Problems*, to appear 2026,
-**David Christoph Ebert**,
-University of Bonn.
+> **David Christoph Ebert**,
+> University of Bonn.
 
 It generalizes procedures presented in the article
 
 > *On Uncertainty Quantification of Eigenvalues and Eigenspaces with Higher Multiplicity*,
-**Jürgen Dölz and David Ebert**,
-SIAM Journal on Numerical Analysis, 62 (2024), pp. 422-451,
-https://doi.org/10.1137/22M1529324.
+> **Jürgen Dölz and David Ebert**,
+> SIAM Journal on Numerical Analysis, 62 (2024), pp. 422-451,
+> https://doi.org/10.1137/22M1529324.
 
-When using this package please cite the above references.
+When using this package please cite the above references as well as the archive
+> *eigen_derivatives (v1.0.0)*,
+> **David Ebert**, 2025,
+> Zenodo, https://doi.org/10.5281/zenodo.17478322.
+
 No additional Matlab toolboxes are required.
 
 ## Description
