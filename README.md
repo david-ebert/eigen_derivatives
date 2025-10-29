@@ -2,7 +2,7 @@
 
 This Matlab package is an implementation of the pseudocode presented in chapter 3 of the PhD thesis
 
-*Uncertainty Quantification of Elliptic Eigenvalue Problems with Degenerate Eigenvalues*. 2026.
+*Uncertainty Quantification of Elliptic Eigenvalue Problems*. 2026.
 **David Christoph Ebert**.
 University of Bonn.
 doi.org/TBA .
