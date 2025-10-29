@@ -2,11 +2,18 @@
 
 This Matlab package is an implementation of the pseudocode presented in chapter 3 of the PhD thesis
 
-*Uncertainty Quantification of Elliptic Eigenvalue Problems*. 2026.
-**David Christoph Ebert**.
+> *Uncertainty Quantification of Elliptic Eigenvalue Problems*, to appear 2026,
+**David Christoph Ebert**,
 University of Bonn.
-doi.org/TBA .
 
+It generalizes procedures presented in the article
+
+> *On Uncertainty Quantification of Eigenvalues and Eigenspaces with Higher Multiplicity*,
+**Jürgen Dölz and David Ebert**,
+SIAM Journal on Numerical Analysis, 62 (2024), pp. 422-451,
+https://doi.org/10.1137/22M1529324.
+
+When using this package please cite the above references.
 No additional Matlab toolboxes are required.
 
 ## Description
@@ -32,9 +39,8 @@ To include this package use
 | `pol.m`           | (initial) polarization matrix given derivatives of eigenvalues with respect to eigenspace, throws warning if initial polarization cannot be fully determined by input
 | `pol_der.m`       | derivatives of polarization matrix
 | `du_pol.m`        | polarized eigenfunction derivatives given derivatives with respect to eigenspace and polarization (initial and derivatives)
-| *auxiliary* |
-| `multiindexsum.m` | compiles list of multiindices of certain length that sum to a give order
-| `multinom.m`      | multinomial coefficients for multiindex given output of multiindexsum.m
+| `multiindexsum.m` | (auxiliary) compiles list of multiindices of certain length that sum to a give order
+| `multinom.m`      | (auxiliary) multinomial coefficients for multiindex given output of multiindexsum.m
 
 ### Examples
 
