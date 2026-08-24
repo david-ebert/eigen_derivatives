@@ -27,7 +27,7 @@ switch nargin
         d = length(du);
         du_pol = cells(d,1);
         for i = 1:d
-            du_pol = du{1}*P0;
+            du_pol = du{i}*P0;
         end
     case 4
         d = length(dP);
@@ -42,10 +42,10 @@ switch nargin
         clear u0 du
     
         % merge Q0 and dQ
-        Q_dQ = cell(d+1,1);
-        Q_dQ{1} = P0;
+        P_dP = cell(d+1,1);
+        P_dP{1} = P0;
         for i = 1:d
-            Q_dQ{1+i} = dP{i};
+            P_dP{1+i} = dP{i};
         end
         clear P0 dP
     
@@ -59,7 +59,7 @@ switch nargin
             dku = zeros(size_du);
             for i_build = 1:n_build
                 ind = mindexs(i_build,:);
-                dku = mnc(i_build) * u_du{1+ind(1)}* Q_dQ{1+ind(2)};
+                dku = dku + mnc(i_build) * u_du{1+ind(1)}* P_dP{1+ind(2)};
             end
             du_pol{k} = dku;
         end
