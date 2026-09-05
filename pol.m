@@ -44,7 +44,7 @@ for i = 1:max(group)
             for j = k+1:d; dL_sub{j} = P0(:,I)'*dL{j}*P0(:,I); end
             [P_adj(I,I),polk(I,I)] = pol(dL_sub,tol,k+1); % recursion
         else
-            polk = Inf(n); % ran out of derivatives
+            polk(I,I) = Inf; % ran out of derivatives
         end
     end
 end

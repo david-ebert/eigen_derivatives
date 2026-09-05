@@ -65,3 +65,12 @@ dK = {dx*dxK, dx^2*dx2K + dy^2*dy2K, zeros(n), zeros(n)};
 [dL, ~] = eig_der(D(1), V, K_0, dK);
 [~, k_pol] = pol(dL);
 assert(isequal(k_pol, [2 2 1 1; 2 2 1 1; 1 1 2 2; 1 1 2 2]))
+
+%% exhausted derivatives: only the degenerate blocks are marked
+% two pairs that stay degenerate, but the pairs separate from each other
+% at first order, so those entries must survive
+dL = {diag([1 1 2 2])};
+warning('off', 'eig_deriv:pol_unseparable');
+[~, k_pol] = pol(dL);
+warning('on', 'eig_deriv:pol_unseparable');
+assert(isequal(k_pol, [Inf Inf 1 1; Inf Inf 1 1; 1 1 Inf Inf; 1 1 Inf Inf]))
