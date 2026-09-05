@@ -7,13 +7,13 @@ function [dP,dl] = pol_der(dL,P0,polk,u0,du,M0,dM)
 % Input Arguments
 %   dL - Eigenvalue derivatives wrt eigenspace
 %       cell vector of mxm-matrices
-%   P0 - Initial eigenfunctions
-%       mxm-matix
+%   P0 - Initial polarization matrix
+%       mxm-matrix
 %   polk - Decision matrix
-%       mxm-matix
-%   u0 - Eigenfunctions of eigenspace
+%       mxm-matrix
+%   u0 - Eigenvectors of eigenspace
 %       nxm-matrix
-%   du - Eigenfunction derivatives wrt eigenspace
+%   du - Eigenvector derivatives wrt eigenspace
 %       cell vector of nxm-matrices
 %   M0 - Mass matrix
 %       eye(n) (default) nxn-matrix;
@@ -22,7 +22,7 @@ function [dP,dl] = pol_der(dL,P0,polk,u0,du,M0,dM)
 %       assumed zeros if not specified
 %
 % Output Arguments
-%   dP - Derivatives of polarization matix
+%   dP - Derivatives of polarization matrix
 %       cell vector of mxm-matrices
 %   dl - Polarized eigenvalue derivatives
 %       cell vector of mx1-vectors
@@ -53,7 +53,7 @@ switch nargin
 end
 clear M0 dM
 
-% merge P0 and initalize
+% merge P0 and initialize
 P_dP = cell(d+1,1);
 P_dP{1} = P0;
 for i = 1:d

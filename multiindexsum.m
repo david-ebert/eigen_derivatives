@@ -1,5 +1,5 @@
 function [list] = multiindexsum(o,n)
-%MULTINDEXSUM all multiindces of specific length and order 
+%MULTIINDEXSUM all multiindices of specific length and order 
 %   [list] = MULTIINDEXSUM(o,n)
 %
 % Input Arguments

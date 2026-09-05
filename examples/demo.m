@@ -17,7 +17,7 @@ n_y = length(y_);
 t_ = linspace(-1,1,101);
 n_t = length(t_);
 
-%% build parameterized Matrix
+%% build parametrized Matrix
 
 K_fris =@(x,y) K_0 ...
     + x*dxK + x.^2/2*dx2K + x.^3/6*dx3K + x.^4/24*dx4K...
@@ -70,7 +70,7 @@ else
     tic
     [dP_,dl_] = pol_der(dL_,P0,k_pol,u0,du_);
     disp("Derivatives of polarization in " + num2str(toc) + " seconds.")
-    % polarized derivatives of eigenfunctions
+    % polarized derivatives of eigenvectors
     [du_pol,u0_pol] = du_pol(u0,du_,P0,dP_);
 end
 

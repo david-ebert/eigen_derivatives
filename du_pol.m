@@ -1,12 +1,12 @@
 function [du_pol,u0_pol] = du_pol(u0,du,P0,dP)
-%DU_POL - Polarized eigenfunction derivatives
+%DU_POL - Polarized eigenvector derivatives
 %   [du_P] = DU_POL(u0,du,P0):     constant polarization
 %   [du_P] = DU_POL(u0,du,P0,dP):  non-constant polarization
 %
 % Input Arguments
-%   u0 - Initial eigenfunctions
+%   u0 - Initial eigenvectors
 %       nxm-matrix
-%   du - Derivatives of eigenfunctions wrt eigenspace
+%   du - Derivatives of eigenvectors wrt eigenspace
 %       cell vector of nxm-matrices
 %   P0 - Initial polarization matrix
 %       mxm-matrix
@@ -14,9 +14,9 @@ function [du_pol,u0_pol] = du_pol(u0,du,P0,dP)
 %       cell vector of mxm-matrices
 %
 % Output Arguments
-%   du_pol - Polarized eigenfunction derivatives
+%   du_pol - Polarized eigenvector derivatives
 %       cell vector of nxm-matrices
-%   u0_pol - Polarized initial eigenfunctions
+%   u0_pol - Polarized initial eigenvectors
 %       nxm-matrix
 %
 % See also EIG_DER, POL, POL_DER

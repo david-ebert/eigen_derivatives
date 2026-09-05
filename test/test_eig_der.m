@@ -19,7 +19,7 @@ end
 assert(abs(dL{1} - 1) < 1e-12)
 assert(abs(dL{2} + 2) < 1e-12)
 
-%% second eigenvector derivative matches the normalised branch
+%% second eigenvector derivative matches the normalized branch
 [~, du] = eig_der(l0, u0, A0, dA);
 assert(norm(du{2} - [-1; 4]) < 1e-10)
 
