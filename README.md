@@ -16,7 +16,7 @@ It generalizes procedures presented in the article
 > https://doi.org/10.1137/22M1529324.
 
 When using this package please cite the above references as well as the archive
-> *eigen_derivatives (v1.0.0)*,
+> *eigen_derivatives*,
 > **David Ebert**, 2025,
 > Zenodo, https://doi.org/10.5281/zenodo.17478322.
 
