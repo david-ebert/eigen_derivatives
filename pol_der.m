@@ -1,5 +1,5 @@
 function [dP,dl] = pol_der(dL,P0,polk,u0,du,M0,dM)
-%POL_DER calculates available polarized derivatives of dl and corresponding dQ
+%POL_DER calculates available polarized derivatives of dl and corresponding dP
 %   [dP,dl] = POL_DER(dL,P0,polk,u0,du)
 %   [dP,dl] = POL_DER(dL,P0,polk,u0,du,M0)
 %   [dP,dl] = POL_DER(dL,P0,polk,u0,du,M0,dM)
@@ -53,12 +53,13 @@ switch nargin
 end
 clear M0 dM
 
-% merge Q0 and initalize
-Q_dQ = cell(d+1,1);
-Q_dQ{1} = P0;
+% merge P0 and initalize
+P_dP = cell(d+1,1);
+P_dP{1} = P0;
 for i = 1:d
-    Q_dQ{1+i} = zeros(m);
+    P_dP{1+i} = zeros(m);
 end
+determined = false(d,m);
 dl = cell(d,1);
 for i = 1:d
     dl{i} = zeros(m,1);
@@ -75,18 +76,18 @@ for k_l = 1:d
         lhs = -P0';
         rhs = zeros(m,1);
         kii = polk(i,i); % deciding order
-        k_Q = k_l-kii;
+        k_P = k_l-kii;
 
-        %% adjust dQ
-        % set conditions related to previously determined dQ 
+        %% adjust dP
+        % set conditions related to previously determined dP 
         % this is necessary for calculation of dl
         for j = 1:m
             kij = polk(i,j);
             if kij < kii
-                rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl);
+                rhs(j) = coeff_builder(i,j,k_P,kij,P_dP,dL,dl);
             end
         end
-        Q_dQ{1+k_Q}(:,i) = lhs\rhs;
+        P_dP{1+k_P}(:,i) = lhs\rhs;
 
         %% dl
         % calculate dl separately
@@ -98,20 +99,20 @@ for k_l = 1:d
         for i_build = 1:n_build
             ind = mindexs(i_build,:);
             sumR = sumR + ...
-                mnc(i_build) * (dL{ind(1)}*Q_dQ{1+ind(2)}(:,i) - Q_dQ{1+ind(2)}(:,i)*dl{ind(1)}(i));
+                mnc(i_build) * (dL{ind(1)}*P_dP{1+ind(2)}(:,i) - P_dP{1+ind(2)}(:,i)*dl{ind(1)}(i));
         end
         dl{k_l}(i) = P0(:,i)'*sumR;
 
-        %% dQ final
-        % use dl for condition and calculate dQ
-        for j = 1:m %% assemble condition to Q0(:,j)
+        %% dP final
+        % use dl for condition and calculate dP
+        for j = 1:m %% assemble condition to P0(:,j)
             kij = polk(i,j);
             if kij == kii
                 if i~=j % standard conditions
-                    rhs(j) = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl);
+                    rhs(j) = coeff_builder(i,j,k_P,kij,P_dP,dL,dl);
                 else % normalization condition
-                    mindexs = multiindexsum(k_Q,5);
-                    mindexs = mindexs(mindexs(:,1)<k_Q & mindexs(:,5)<k_Q,:);
+                    mindexs = multiindexsum(k_P,5);
+                    mindexs = mindexs(mindexs(:,1)<k_P & mindexs(:,5)<k_P,:);
                     if nargin < 7
                         mindexs = mindexs(mindexs(:,3)==0,:);
                     end
@@ -121,35 +122,37 @@ for k_l = 1:d
                         ind = mindexs(i_build,:);
                         rhs(j) = rhs(j) + ...
                             (mnc_norm(i_build)/2) *...
-                            Q_dQ{1+ind(1)}(:,i)'* (u_du{1+ind(2)}'*M_dM{1+ind(3)}*u_du{1+ind(4)}) *Q_dQ{1+ind(5)}(:,i);
+                            P_dP{1+ind(1)}(:,i)'* (u_du{1+ind(2)}'*M_dM{1+ind(3)}*u_du{1+ind(4)}) *P_dP{1+ind(5)}(:,i);
                     end
                 end
             end
         end
-        Q_dQ{1+k_Q}(:,i) = lhs\rhs;
+        P_dP{1+k_P}(:,i) = lhs\rhs;
+        determined(k_P,i) = true;
     end  
 end
 
 %% output
 
-dP = cell(length(Q_dQ)-1,1);
-for i = 1:length(Q_dQ)-1
-    dP{i} = Q_dQ{i+1};
+dP = cell(length(P_dP)-1,1);
+for i = 1:length(P_dP)-1
+    dP{i} = P_dP{i+1};
+    dP{i}(:,~determined(i,:)) = NaN;
 end
 
 end
 
-function r = coeff_builder(i,j,k_Q,kij,Q_dQ,dL,dl_Q)
+function r = coeff_builder(i,j,k_P,kij,P_dP,dL,dl_P)
 r = 0;
-m = size(Q_dQ{1},1);
-mindexs = multiindexsum(k_Q + kij,2);
+m = size(P_dP{1},1);
+mindexs = multiindexsum(k_P + kij,2);
 mindexs = mindexs(mindexs(:,1)>=kij,:); % dkL, k > polk
 mnc = multinom(mindexs);
 [n_build,~] = size(mindexs);
 for i_build = 1:n_build
     ind = mindexs(i_build,:);
     r = r + ...
-        mnc(i_build) * Q_dQ{1}(:,j)'* (dL{ind(1)}-dl_Q{ind(1)}(i)*eye(m)) *Q_dQ{1+ind(2)}(:,i);
+        mnc(i_build) * P_dP{1}(:,j)'* (dL{ind(1)}-dl_P{ind(1)}(i)*eye(m)) *P_dP{1+ind(2)}(:,i);
 end
-r = r/ (multinom([kij,k_Q])* (dl_Q{kij}(j) - dl_Q{kij}(i)));
+r = r/ (multinom([kij,k_P])* (dl_P{kij}(j) - dl_P{kij}(i)));
 end

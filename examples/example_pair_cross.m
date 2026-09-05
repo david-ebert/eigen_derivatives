@@ -34,7 +34,7 @@ dy2K = ...
       0 , 0 , 1 , 0  ]*2;
 
 dx3K = zeros(n_inner);
-dx4K = diag(n_inner);
+dx4K = zeros(n_inner);
 dy3K = zeros(n_inner);
 dy4K = zeros(n_inner);
 

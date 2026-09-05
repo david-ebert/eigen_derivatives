@@ -59,26 +59,22 @@ lhs     = [nw_tile, ne_tile; ne_tile', sparse(m,m)];
 
 for k = 1:d
     %% orthonormal conditions
-    if nargin == 4
-        diagterm = zeros(m);
-    else
-        diagterm  = zeros(m,1);
-        mindexs = multiindexsum(k,3);
-        mindexs = mindexs(mindexs(:,1)<k & mindexs(:,3)<k,:);
-        if nargin < 6
-            mindexs = mindexs(mindexs(:,2)==0,:);
-        end
-        mnc = multinom(mindexs);
-        [n_build,~] = size(mindexs);
-        for i_build = 1:n_build
-            ind = mindexs(i_build,:);
-            for i = 1:m
-                diagterm(i) = diagterm(i) + ...
-                    (mnc(i_build)/2)* u_du{1+ind(1)}(:,i)'*M_dM{1+ind(2)}*u_du{1+ind(3)}(:,i);
-            end
-        end
-        diagterm = diag(diagterm);
+    diagterm  = zeros(m,1);
+    mindexs = multiindexsum(k,3);
+    mindexs = mindexs(mindexs(:,1)<k & mindexs(:,3)<k,:);
+    if nargin < 6
+        mindexs = mindexs(mindexs(:,2)==0,:);
     end
+    mnc = multinom(mindexs);
+    [n_build,~] = size(mindexs);
+    for i_build = 1:n_build
+        ind = mindexs(i_build,:);
+        for i = 1:m
+            diagterm(i) = diagterm(i) + ...
+                (mnc(i_build)/2)* u_du{1+ind(1)}(:,i)'*M_dM{1+ind(2)}*u_du{1+ind(3)}(:,i);
+        end
+    end
+    diagterm = diag(diagterm);
     %% main conditions
     rhs_n = zeros(n_dof,m);
     % A

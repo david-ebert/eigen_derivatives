@@ -25,9 +25,9 @@ u0_pol = u0*P0;
 switch nargin 
     case 3
         d = length(du);
-        du_pol = cells(d,1);
+        du_pol = cell(d,1);
         for i = 1:d
-            du_pol = du{i}*P0;
+            du_pol{i} = du{i}*P0;
         end
     case 4
         d = length(dP);
@@ -41,7 +41,7 @@ switch nargin
         u_du{1} = u0;
         clear u0 du
     
-        % merge Q0 and dQ
+        % merge P0 and dP
         P_dP = cell(d+1,1);
         P_dP{1} = P0;
         for i = 1:d
